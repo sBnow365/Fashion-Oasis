@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const hbs = require("hbs");
-const collection = require("./mongodb"); // Ensure this connects to your MongoDB collection
+const collection = require("./mongodb"); // mongo db object
 
 const templatePath = path.join(__dirname, "./templates");
 
@@ -32,8 +32,7 @@ app.post("/signup", async (req, res) => {
         const checking = await collection.findOne({ name: req.body.name });
 
         if (checking) {
-            return res.render("signup");
-            // return res.status(400).send("User already exists. Please log in.");
+            return res.render("signup");//agar pehle se ho database mei
         }
 
         await collection.insertMany([data]);
@@ -47,8 +46,8 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
     try {
-        const user = await collection.findOne({
-            name: req.body.name,
+        const user = await collection.findOne({ //database se check kar rha hain ki login page pe entered 
+            name: req.body.name,    //to agar pehle se hai toh home pe direct hojayega
             password: req.body.password
         });
 
